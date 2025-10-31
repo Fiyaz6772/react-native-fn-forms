@@ -1,4 +1,4 @@
-# React Native Smart Forms Library
+# React Native FN Forms Library
 
 This is a pure JavaScript React Native library for intelligent form validation with built-in field-specific validators.
 

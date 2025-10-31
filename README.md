@@ -1,4 +1,4 @@
-# React Native Smart Forms
+# React Native FN Forms
 
 🚀 **Intelligent form validation library for React Native with built-in field-specific validators**
 
@@ -18,9 +18,9 @@ A pure JavaScript React Native library that provides smart, real-time form valid
 ## 🚀 Installation
 
 ```bash
-npm install react-native-smart-forms
+npm install react-native-fn-forms
 # or
-yarn add react-native-smart-forms
+yarn add react-native-fn-forms
 ```
 
 ## 📖 Quick Start
@@ -28,7 +28,7 @@ yarn add react-native-smart-forms
 ```typescript
 import React from 'react';
 import { View, Button } from 'react-native';
-import { useSmartForm, FormProvider, SmartFormField } from 'react-native-smart-forms';
+import { useSmartForm, FormProvider, SmartFormField } from 'react-native-fn-forms';
 
 const MyForm = () => {
   const form = useSmartForm({
@@ -181,7 +181,7 @@ const form = useSmartForm({
 You can create your own form field components:
 
 ```typescript
-import { useFormContext } from 'react-native-smart-forms';
+import { useFormContext } from 'react-native-fn-forms';
 
 const CustomField = ({ name, ...props }) => {
   const form = useFormContext();
@@ -269,9 +269,9 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 🙏 Support
 
 - ⭐ Star this repo if you find it helpful
-- 🐛 [Report bugs](https://github.com/yourusername/react-native-smart-forms/issues)
-- 💡 [Request features](https://github.com/yourusername/react-native-smart-forms/issues)
-- 📖 [Read the docs](https://github.com/yourusername/react-native-smart-forms#readme)
+- 🐛 [Report bugs](https://github.com/Fiyaz6772/react-native-fn-forms/issues)
+- 💡 [Request features](https://github.com/Fiyaz6772/react-native-fn-forms/issues)
+- 📖 [Read the docs](https://github.com/Fiyaz6772/react-native-fn-forms#readme)
 
 ---
 

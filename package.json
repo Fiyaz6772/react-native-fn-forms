@@ -1,6 +1,6 @@
 {
-  "name": "react-native-smart-forms",
-  "version": "1.0.1",
+  "name": "react-native-fn-forms",
+  "version": "1.0.0",
   "description": "Intelligent form validation library for React Native with built-in field-specific validators",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -27,12 +27,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fiyaz6772/react-native-smart-forms.git"
+    "url": "git+https://github.com/Fiyaz6772/react-native-fn-forms.git"
   },
   "bugs": {
-    "url": "https://github.com/Fiyaz6772/react-native-smart-forms/issues"
+    "url": "https://github.com/Fiyaz6772/react-native-fn-forms/issues"
   },
-  "homepage": "https://github.com/Fiyaz6772/react-native-smart-forms#readme",
+  "homepage": "https://github.com/Fiyaz6772/react-native-fn-forms#readme",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-native": ">=0.60.0"

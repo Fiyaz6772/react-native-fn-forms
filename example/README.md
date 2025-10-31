@@ -1,13 +1,13 @@
-# React Native Smart Forms - Example Usage
+# React Native FN Forms - Example Usage
 
-This directory contains example implementations of the react-native-smart-forms library.
+This directory contains example implementations of the react-native-fn-forms library.
 
 ## Basic Example
 
 ```typescript
 import React from 'react';
 import { View, Button } from 'react-native';
-import { useSmartForm, FormProvider, SmartFormField } from 'react-native-smart-forms';
+import { useSmartForm, FormProvider, SmartFormField } from 'react-native-fn-forms';
 
 const ExampleForm = () => {
   const form = useSmartForm({
