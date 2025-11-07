@@ -4,11 +4,12 @@
 
 ![npm](https://img.shields.io/npm/v/react-native-fn-forms) ![npm downloads](https://img.shields.io/npm/dt/react-native-fn-forms) ![GitHub](https://img.shields.io/github/license/Fiyaz6772/react-native-fn-forms) ![React Native](https://img.shields.io/badge/React%20Native-0.60%2B-blue)
 
-**React Native FN Forms** is an intelligent form validation library with built-in field-specific validators for email, phone numbers, names, credit cards, and more. Perfect for React Native apps that need smart, real-time form validation.
+**React Native FN Forms** is an intelligent form validation library with built-in field-specific validators for email, phone numbers, names, credit cards, OTP verification, and more. Perfect for React Native apps that need smart, real-time form validation with seamless OTP verification flows.
 
 ## 🎯 **Why Choose React Native FN Forms?**
 
 - ✅ **10+ Built-in Validators** - Email, phone, credit card, names, addresses, etc.
+- ✅ **OTP Verification** - Complete OTP input component with SMS auto-fill
 - ✅ **Smart Auto-formatting** - Phone numbers, credit cards format automatically
 - ✅ **Real-time Validation** - Instant feedback with customizable debouncing
 - ✅ **TypeScript First** - Full type safety and IntelliSense support
@@ -17,11 +18,12 @@
 - ✅ **Zero Native Dependencies** - Pure JavaScript, easy installation
 - ✅ **Performance Optimized** - Minimal re-renders, efficient validation
 
-A pure JavaScript React Native library that provides smart, real-time form validation with built-in validators for common field types like names, emails, phone numbers, and more.
+A pure JavaScript React Native library that provides smart, real-time form validation with built-in validators for common field types like names, emails, phone numbers, OTP codes, and more.
 
 ## ✨ Features
 
 - 🧠 **Smart Field Validation** - Built-in validators for common field types (name, email, phone, etc.)
+- 🔐 **OTP Verification** - Complete OTP component with SMS auto-fill (iOS/Android)
 - ⚡ **Real-time Validation** - Debounced validation with customizable timing
 - 🎯 **React Native Optimized** - Platform-specific input props and keyboard handling
 - 📱 **Cross-platform** - Works on iOS, Android, and React Native Web
@@ -43,7 +45,7 @@ yarn add react-native-fn-forms
 ```typescript
 import React from 'react';
 import { View, Button } from 'react-native';
-import { useSmartForm, FormProvider, SmartFormField } from 'react-native-fn-forms';
+import { useSmartForm, FormProvider, SmartFormField, SmartOTPField } from 'react-native-fn-forms';
 
 const MyForm = () => {
   const form = useSmartForm({
@@ -99,7 +101,44 @@ const MyForm = () => {
 };
 ```
 
-## 🔍 Built-in Field Types
+### � OTP Verification Example
+
+```typescript
+import { SmartOTPField } from 'react-native-fn-forms';
+
+const OTPVerification = () => {
+  const form = useSmartForm({
+    fields: {
+      email: { type: 'email', required: true },
+      otp: { type: 'otp', required: true, length: 6 }
+    }
+  });
+
+  return (
+    <FormProvider value={form}>
+      <View style={{ padding: 20 }}>
+        <SmartFormField
+          name="email"
+          label="Email Address"
+          placeholder="Enter your email"
+        />
+
+        <SmartOTPField
+          name="otp"
+          label="Verification Code"
+          length={6}
+          autoFocus={true}
+          onComplete={(code) => console.log('OTP Complete:', code)}
+        />
+
+        <Button title="Verify" onPress={() => form.submitForm()} />
+      </View>
+    </FormProvider>
+  );
+};
+```
+
+## �🔍 Built-in Field Types
 
 | Field Type      | Description                                      | Auto-formatting                | Validation                     |
 | --------------- | ------------------------------------------------ | ------------------------------ | ------------------------------ |
@@ -113,6 +152,7 @@ const MyForm = () => {
 | `streetAddress` | Street addresses                                 | ✅ Title case                  | ✅ Address characters          |
 | `url`           | Web URLs                                         | ✅ Add https:// if missing     | ✅ Valid URL format            |
 | `password`      | Passwords                                        | ❌ No formatting               | ✅ Strength requirements       |
+| `otp`           | OTP codes (4/6/8 digits)                         | ❌ No formatting               | ✅ Numeric validation          |
 
 ## 🛠 Advanced Usage
 
@@ -272,6 +312,22 @@ Context provider for form state.
 ### `SmartFormField`
 
 Pre-built input component with built-in validation display.
+
+### `SmartOTPField`
+
+Specialized OTP input component with SMS auto-fill and mobile optimizations.
+
+**Props:**
+
+- `name: string` - Field name for form integration
+- `label?: string` - Optional label text
+- `length?: number` - OTP length (4, 6, or 8 digits) - defaults to 6
+- `autoFocus?: boolean` - Auto-focus first input on mount
+- `autoSubmit?: boolean` - Auto-submit when OTP is complete
+- `onComplete?: (code: string) => void` - Callback when OTP entry is complete
+- `cellStyle?: ViewStyle` - Custom styling for OTP input cells
+- `labelStyle?: TextStyle` - Custom styling for the label
+- `...otherProps` - Additional props passed to the container
 
 ## 🤝 Contributing
 
