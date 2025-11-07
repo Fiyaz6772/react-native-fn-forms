@@ -11,7 +11,8 @@ export type FieldType =
   | 'username'
   | 'url'
   | 'date'
-  | 'number';
+  | 'number'
+  | 'otp';
 
 export interface ValidationRule {
   type: string;
@@ -38,6 +39,9 @@ export interface FieldConfig {
     hint?: string;
     role?: string;
   };
+  // OTP-specific properties
+  length?: 4 | 6 | 8;
+  autoSubmit?: boolean;
 }
 
 export interface FormConfig {

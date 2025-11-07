@@ -37,6 +37,10 @@ example/node_modules/
 example/.expo/
 example/.expo-shared/
 
+# Example folder - ignore all files except README.md
+example/*
+!example/README.md
+
 # Temporary folders
 tmp/
 temp/

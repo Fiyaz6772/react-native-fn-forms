@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-11-01
 
 ### Added
+
 - Initial release of React Native FN Forms
 - Smart form validation with built-in field validators
 - Support for common field types: email, phone, names, credit cards, etc.
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete documentation and examples
 
 ### Features
+
 - `useSmartForm` hook for form management
 - Built-in validators for 10+ field types
 - Auto-formatting for phone numbers, credit cards, etc.

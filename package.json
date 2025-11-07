@@ -1,7 +1,7 @@
 {
   "name": "react-native-fn-forms",
-  "version": "1.0.1",
-  "description": "🚀 Smart form validation library for React Native with built-in validators for email, phone, names, credit cards. Real-time validation, TypeScript support, accessibility-first, cross-platform iOS/Android. Pure JavaScript, no native dependencies.",
+  "version": "1.1.0",
+  "description": "🚀 Smart form validation library for React Native with built-in validators for email, phone, names, credit cards, OTP verification. Real-time validation, TypeScript support, accessibility-first, cross-platform iOS/Android. Pure JavaScript, no native dependencies.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -29,6 +29,10 @@
     "phone-validation",
     "name-validation",
     "credit-card-validation",
+    "otp-verification",
+    "otp-input",
+    "two-factor-auth",
+    "sms-verification",
     "mobile-forms",
     "react-native-components",
     "form-hooks",

@@ -11,6 +11,7 @@ const PATTERNS = {
   currency: /^\d+(\.\d{1,2})?$/,
   username: /^[a-zA-Z0-9_\-]+$/,
   url: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
+  otp: /^[0-9]+$/,
 };
 
 // Error messages for different validation types
@@ -28,6 +29,7 @@ const ERROR_MESSAGES = {
     currency: 'Please enter a valid amount (e.g., 10.99)',
     username: 'Username can only contain letters, numbers, underscores, and hyphens',
     url: 'Please enter a valid URL starting with http:// or https://',
+    otp: 'OTP can only contain numbers',
   },
 };
 
@@ -40,6 +42,7 @@ const SUGGESTIONS = {
   currency: 'Use format like 10.99 (up to 2 decimal places)',
   username: 'Use only letters, numbers, underscores, and hyphens',
   url: 'Start with http:// or https://',
+  otp: 'Enter only the numbers from your verification code',
 };
 
 // Luhn algorithm for credit card validation
