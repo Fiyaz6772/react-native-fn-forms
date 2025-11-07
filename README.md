@@ -1,6 +1,21 @@
 # React Native FN Forms
 
-🚀 **Intelligent form validation library for React Native with built-in field-specific validators**
+🚀 **The smartest form validation library for React Native** 🚀
+
+![npm](https://img.shields.io/npm/v/react-native-fn-forms) ![npm downloads](https://img.shields.io/npm/dt/react-native-fn-forms) ![GitHub](https://img.shields.io/github/license/Fiyaz6772/react-native-fn-forms) ![React Native](https://img.shields.io/badge/React%20Native-0.60%2B-blue)
+
+**React Native FN Forms** is an intelligent form validation library with built-in field-specific validators for email, phone numbers, names, credit cards, and more. Perfect for React Native apps that need smart, real-time form validation.
+
+## 🎯 **Why Choose React Native FN Forms?**
+
+- ✅ **10+ Built-in Validators** - Email, phone, credit card, names, addresses, etc.
+- ✅ **Smart Auto-formatting** - Phone numbers, credit cards format automatically
+- ✅ **Real-time Validation** - Instant feedback with customizable debouncing
+- ✅ **TypeScript First** - Full type safety and IntelliSense support
+- ✅ **Accessibility Ready** - Screen reader support and proper ARIA labels
+- ✅ **Cross-platform** - iOS, Android, and React Native Web
+- ✅ **Zero Native Dependencies** - Pure JavaScript, easy installation
+- ✅ **Performance Optimized** - Minimal re-renders, efficient validation
 
 A pure JavaScript React Native library that provides smart, real-time form validation with built-in validators for common field types like names, emails, phone numbers, and more.
 
