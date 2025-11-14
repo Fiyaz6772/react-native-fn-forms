@@ -58,6 +58,8 @@ yarn add react-native-fn-forms
 - 🔐 **[Login Form](docs/examples/login-form.md)** - Complete login form example
 - 📝 **[Signup Form](docs/examples/signup-form.md)** - Registration form with validation
 - 💳 **[Payment Form](docs/examples/payment-form.md)** - Credit card payment form
+- ✅ **[Confirmation Fields](docs/examples/confirmation-fields.md)** - Email and password confirmation
+- 💾 **[Auto-save & Draft Recovery](docs/examples/auto-save-draft.md)** - Automatic draft saving
 
 ### Additional Resources
 
@@ -180,6 +182,67 @@ const OTPVerification = () => {
 | `otp`           | OTP codes (4/6/8 digits)                         | ❌ No formatting               | ✅ Numeric validation          |
 
 ## 🔥 Key Features
+
+### Auto-save & Draft Recovery
+
+Automatic draft saving with flexible storage adapters:
+
+```typescript
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const form = useSmartForm({
+  fields: {
+    email: { type: 'email', required: true },
+    message: { type: 'text', required: true },
+  },
+  autoSave: {
+    enabled: true,
+    debounce: 1000,
+    key: 'contact-form-draft',
+    expirationDays: 7,
+    storage: {
+      save: async (key, data) => await AsyncStorage.setItem(key, data),
+      load: async key => await AsyncStorage.getItem(key),
+      remove: async key => await AsyncStorage.removeItem(key),
+    },
+  },
+  onDraftFound: draft => {
+    Alert.alert('Resume?', 'You have unsaved changes', [
+      { text: 'Discard', onPress: () => form.clearDraft() },
+      { text: 'Resume', onPress: () => form.loadDraft(draft) },
+    ]);
+  },
+});
+```
+
+📖 **[See auto-save & draft recovery guide →](docs/examples/auto-save-draft.md)**
+
+### Field Matching / Confirmation Fields
+
+Built-in support for email and password confirmation:
+
+```typescript
+const form = useSmartForm({
+  fields: {
+    email: { type: 'email', required: true },
+    confirmEmail: {
+      type: 'email',
+      required: true,
+      matchField: 'email',
+      matchErrorMessage: 'Email addresses must match',
+    },
+    password: { type: 'password', required: true, minLength: 8 },
+    confirmPassword: {
+      type: 'password',
+      required: true,
+      matchField: 'password',
+      matchErrorMessage: 'Passwords must match',
+    },
+  },
+});
+```
+
+📖 **[See confirmation fields example →](docs/examples/confirmation-fields.md)**
 
 ### Validation Modes
 

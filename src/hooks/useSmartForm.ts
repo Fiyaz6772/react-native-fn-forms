@@ -22,6 +22,8 @@ const DEFAULT_CONFIG: Partial<FormConfig> = {
 export const useSmartForm = (config: FormConfig): SmartFormHook => {
   const mergedConfig = { ...DEFAULT_CONFIG, ...config };
   const debounceTimers = useRef<Record<string, any>>({});
+  const autoSaveTimer = useRef<any>(null);
+  const [draftLoaded, setDraftLoaded] = useState(false);
 
   // Initialize form state
   const [values, setValues] = useState<FormValues>(() => {
@@ -89,6 +91,14 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
         }
       }
 
+      // Field matching validation (for confirmation fields)
+      if (fieldConfig.matchField) {
+        const matchFieldValue = values[fieldConfig.matchField];
+        if (value !== matchFieldValue) {
+          return fieldConfig.matchErrorMessage || `Must match ${fieldConfig.matchField}`;
+        }
+      }
+
       // Custom validation
       if (fieldConfig.customValidation) {
         const customError = fieldConfig.customValidation(value);
@@ -142,6 +152,23 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
           return newErrors;
         });
       }
+
+      // Revalidate any fields that match this field (e.g., confirmPassword when password changes)
+      Object.keys(config.fields).forEach(async otherFieldName => {
+        const otherFieldConfig = config.fields[otherFieldName];
+        if (otherFieldConfig.matchField === fieldName && touched[otherFieldName]) {
+          const error = await validateField(otherFieldName);
+          if (error) {
+            setErrors(prev => ({ ...prev, [otherFieldName]: error }));
+          } else {
+            setErrors(prev => {
+              const newErrors = { ...prev };
+              delete newErrors[otherFieldName];
+              return newErrors;
+            });
+          }
+        }
+      });
 
       // Debounced validation
       const shouldValidate =
@@ -276,6 +303,115 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
     };
   }, [mergedConfig.keyboardHandling]);
 
+  // Draft management methods
+  const saveDraft = useCallback(async () => {
+    if (!config.autoSave?.enabled || !config.autoSave?.storage) return;
+
+    try {
+      const draftData = {
+        values,
+        touched,
+        timestamp: Date.now(),
+      };
+
+      await config.autoSave.storage.save(config.autoSave.key, JSON.stringify(draftData));
+
+      config.onAutoSave?.(draftData);
+    } catch (error) {
+      console.error('Failed to save draft:', error);
+    }
+  }, [values, touched, config]);
+
+  const loadDraft = useCallback(
+    (draft?: any) => {
+      if (!draft) return;
+
+      const draftData = draft;
+
+      // Check expiration
+      if (config.autoSave?.expirationDays) {
+        const expirationMs = config.autoSave.expirationDays * 24 * 60 * 60 * 1000;
+        const isExpired = Date.now() - draftData.timestamp > expirationMs;
+        if (isExpired) {
+          clearDraft();
+          return;
+        }
+      }
+
+      setValues(draftData.values);
+      setTouched(draftData.touched);
+      setDraftLoaded(true);
+    },
+    [config]
+  );
+
+  const clearDraft = useCallback(async () => {
+    if (!config.autoSave?.enabled || !config.autoSave?.storage) return;
+
+    try {
+      await config.autoSave.storage.remove(config.autoSave.key);
+    } catch (error) {
+      console.error('Failed to clear draft:', error);
+    }
+  }, [config]);
+
+  const hasDraft = useCallback(async (): Promise<boolean> => {
+    if (!config.autoSave?.enabled || !config.autoSave?.storage) return false;
+
+    try {
+      const data = await config.autoSave.storage.load(config.autoSave.key);
+      return data !== null;
+    } catch (error) {
+      console.error('Failed to check for draft:', error);
+      return false;
+    }
+  }, [config]);
+
+  // Auto-save effect
+  useEffect(() => {
+    if (!config.autoSave?.enabled || !config.autoSave?.storage) return;
+
+    const debounceTime = config.autoSave.debounce || 1000;
+
+    if (autoSaveTimer.current) {
+      clearTimeout(autoSaveTimer.current);
+    }
+
+    autoSaveTimer.current = setTimeout(() => {
+      saveDraft();
+    }, debounceTime);
+
+    return () => {
+      if (autoSaveTimer.current) {
+        clearTimeout(autoSaveTimer.current);
+      }
+    };
+  }, [values, touched, config.autoSave, saveDraft]);
+
+  // Load draft on mount
+  useEffect(() => {
+    if (!config.autoSave?.enabled || !config.autoSave?.storage || draftLoaded) return;
+
+    const loadInitialDraft = async () => {
+      try {
+        const data = await config.autoSave!.storage.load(config.autoSave!.key);
+        if (data) {
+          const draft = JSON.parse(data);
+
+          if (config.onDraftFound) {
+            config.onDraftFound(draft);
+          } else {
+            loadDraft(draft);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load draft:', error);
+      }
+    };
+
+    loadInitialDraft();
+  }, [config, draftLoaded, loadDraft]);
+
   return {
     values,
     errors,
@@ -290,5 +426,9 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
     resetForm,
     submitForm,
     getFieldProps,
+    saveDraft,
+    loadDraft,
+    clearDraft,
+    hasDraft,
   };
 };

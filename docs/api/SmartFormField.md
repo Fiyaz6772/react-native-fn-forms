@@ -35,6 +35,8 @@ import { SmartFormField } from 'react-native-fn-forms';
 | `errorStyle`  | `TextStyle` | No       | -       | Custom style for error text             |
 | `labelStyle`  | `TextStyle` | No       | -       | Custom style for label text             |
 
+**Note:** `SmartFormField` accepts all standard React Native `TextInput` props (e.g., `secureTextEntry`, `keyboardType`, `autoCapitalize`, `maxLength`, `multiline`, etc.) in addition to the props listed above.
+
 ---
 
 ## Basic Usage

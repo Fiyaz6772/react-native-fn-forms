@@ -42,6 +42,21 @@ export interface FieldConfig {
   // OTP-specific properties
   length?: 4 | 6 | 8;
   autoSubmit?: boolean;
+  // Field matching for confirmation fields
+  matchField?: string;
+  matchErrorMessage?: string;
+}
+
+export interface StorageAdapter {
+  save: (key: string, data: string) => Promise<void>;
+  load: (key: string) => Promise<string | null>;
+  remove: (key: string) => Promise<void>;
+}
+
+export interface DraftData {
+  values: FormValues;
+  touched: FormTouched;
+  timestamp: number;
 }
 
 export interface FormConfig {
@@ -62,6 +77,15 @@ export interface FormConfig {
     ios?: Record<string, any>;
     android?: Record<string, any>;
   };
+  autoSave?: {
+    enabled: boolean;
+    debounce?: number;
+    storage: StorageAdapter;
+    key: string;
+    expirationDays?: number;
+  };
+  onDraftFound?: (draft: DraftData) => void;
+  onAutoSave?: (data: DraftData) => void;
 }
 
 export type FormValues = Record<string, any>;
@@ -96,4 +120,8 @@ export interface SmartFormHook {
     error: string | undefined;
     touched: boolean;
   };
+  saveDraft: () => Promise<void>;
+  loadDraft: (draft?: DraftData) => void;
+  clearDraft: () => Promise<void>;
+  hasDraft: () => Promise<boolean>;
 }

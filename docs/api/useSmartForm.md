@@ -142,6 +142,80 @@ platform?: {
 }
 ```
 
+#### `config.autoSave` (optional)
+
+Enable automatic draft saving and recovery.
+
+```typescript
+autoSave?: {
+  enabled: boolean;
+  debounce?: number; // default: 1000ms
+  storage: StorageAdapter;
+  key: string;
+  expirationDays?: number;
+}
+```
+
+**Example:**
+
+```typescript
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const form = useSmartForm({
+  fields: {
+    /* ... */
+  },
+  autoSave: {
+    enabled: true,
+    debounce: 1000,
+    key: 'my-form-draft',
+    expirationDays: 7,
+    storage: {
+      save: async (key, data) => await AsyncStorage.setItem(key, data),
+      load: async key => await AsyncStorage.getItem(key),
+      remove: async key => await AsyncStorage.removeItem(key),
+    },
+  },
+});
+```
+
+See [Auto-save & Draft Recovery Example](../examples/auto-save-draft.md) for complete guide.
+
+#### `config.onDraftFound` (optional)
+
+Callback when a draft is found on mount.
+
+```typescript
+onDraftFound?: (draft: DraftData) => void
+```
+
+**Example:**
+
+```typescript
+onDraftFound: draft => {
+  Alert.alert('Resume?', 'You have unsaved changes', [
+    { text: 'Discard', onPress: () => form.clearDraft() },
+    { text: 'Resume', onPress: () => form.loadDraft(draft) },
+  ]);
+};
+```
+
+#### `config.onAutoSave` (optional)
+
+Callback when form is auto-saved.
+
+```typescript
+onAutoSave?: (data: DraftData) => void
+```
+
+**Example:**
+
+```typescript
+onAutoSave: data => {
+  console.log('Saved at:', new Date(data.timestamp));
+};
+```
+
 ---
 
 ## Field Configuration
@@ -371,6 +445,53 @@ length?: 4 | 6 | 8; // default: 6
 autoSubmit?: boolean; // default: false
 ```
 
+#### Field Matching Properties
+
+For confirmation fields (e.g., confirmPassword, confirmEmail):
+
+```typescript
+matchField?: string; // Field name to match against
+matchErrorMessage?: string; // Custom error message when fields don't match
+```
+
+**Example:**
+
+```typescript
+const form = useSmartForm({
+  fields: {
+    email: {
+      type: 'email',
+      required: true,
+    },
+    confirmEmail: {
+      type: 'email',
+      required: true,
+      matchField: 'email',
+      matchErrorMessage: 'Email addresses must match',
+    },
+    password: {
+      type: 'password',
+      required: true,
+      minLength: 8,
+    },
+    confirmPassword: {
+      type: 'password',
+      required: true,
+      matchField: 'password',
+      matchErrorMessage: 'Passwords must match',
+    },
+  },
+});
+```
+
+**Behavior:**
+
+- Validates that the field value matches the specified field
+- Automatically revalidates when the matched field changes
+- Uses custom error message or defaults to "Must match [fieldName]"
+
+See [Confirmation Fields Example](../examples/confirmation-fields.md) for complete usage guide.
+
 ---
 
 ## Return Value
@@ -530,6 +651,51 @@ const fieldProps = form.getFieldProps('email');
   touched: boolean
 }
 ```
+
+#### `saveDraft(): Promise<void>`
+
+Manually save current form state to storage.
+
+```typescript
+await form.saveDraft();
+console.log('Draft saved');
+```
+
+**Note:** Requires `autoSave` configuration to be enabled.
+
+#### `loadDraft(draft?: DraftData): void`
+
+Load a draft into the form.
+
+```typescript
+form.loadDraft(draft);
+```
+
+**Note:** Usually called automatically or in response to `onDraftFound` callback.
+
+#### `clearDraft(): Promise<void>`
+
+Remove saved draft from storage.
+
+```typescript
+await form.clearDraft();
+console.log('Draft cleared');
+```
+
+#### `hasDraft(): Promise<boolean>`
+
+Check if a draft exists in storage.
+
+```typescript
+const exists = await form.hasDraft();
+if (exists) {
+  console.log('Draft found');
+}
+```
+
+---
+
+## Type Definitions
 
 **Usage with custom inputs:**
 

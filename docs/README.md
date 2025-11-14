@@ -43,6 +43,8 @@ Complete, production-ready examples:
 - **[Login Form](examples/login-form.md)** - Email and password login with validation
 - **[Signup Form](examples/signup-form.md)** - Registration form with password confirmation
 - **[Payment Form](examples/payment-form.md)** - Credit card payment form with security
+- **[Confirmation Fields](examples/confirmation-fields.md)** - Email and password confirmation with field matching
+- **[Auto-save & Draft Recovery](examples/auto-save-draft.md)** - Automatic draft saving with multiple storage adapters
 
 ---
 
@@ -64,6 +66,12 @@ Complete, production-ready examples:
 
 **Styling and theming?**
 → [Styling Guide](guides/styling.md)
+
+**Need confirmation fields?**
+→ [Confirmation Fields Example](examples/confirmation-fields.md)
+
+**Want auto-save functionality?**
+→ [Auto-save & Draft Recovery Example](examples/auto-save-draft.md)
 
 ### By Field Type
 

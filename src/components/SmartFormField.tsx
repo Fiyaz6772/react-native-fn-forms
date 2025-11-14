@@ -1,8 +1,8 @@
 import React from 'react';
-import { TextInput, Text, View, StyleSheet } from 'react-native';
+import { TextInput, Text, View, StyleSheet, TextInputProps } from 'react-native';
 import { useFormContext } from '../context/FormContext';
 
-interface SmartFormFieldProps {
+interface SmartFormFieldProps extends Omit<TextInputProps, 'value' | 'onChangeText' | 'onBlur'> {
   name: string;
   placeholder?: string;
   style?: any;
@@ -18,6 +18,7 @@ export const SmartFormField: React.FC<SmartFormFieldProps> = ({
   errorStyle,
   label,
   labelStyle,
+  ...textInputProps
 }) => {
   const form = useFormContext();
   const fieldProps = form.getFieldProps(name);
@@ -27,6 +28,7 @@ export const SmartFormField: React.FC<SmartFormFieldProps> = ({
       {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
       <TextInput
         {...fieldProps}
+        {...textInputProps}
         placeholder={placeholder}
         style={[styles.input, style, fieldProps.error && styles.inputError]}
       />
