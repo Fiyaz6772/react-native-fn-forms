@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2025-11-14
+
+### Added
+
+- **Field Matching / Confirmation Fields** - Built-in support for email and password confirmation
+  - `matchField` property to validate against another field
+  - `matchErrorMessage` for custom error messages
+  - Automatic revalidation when matched field changes
+  - Support for multiple confirmation fields in a single form
+- **Auto-save & Draft Recovery** - Automatic form draft saving and recovery
+  - Flexible storage adapter interface (AsyncStorage, MMKV, SecureStore, etc.)
+  - Configurable auto-save debouncing
+  - Draft expiration support
+  - Manual draft management methods (`saveDraft`, `loadDraft`, `clearDraft`, `hasDraft`)
+  - `onDraftFound` callback for user prompts
+  - `onAutoSave` callback for save notifications
+- **SmartFormField Enhancement** - Now accepts all React Native TextInput props
+  - Pass any standard TextInput prop (secureTextEntry, keyboardType, etc.)
+  - Improved flexibility and customization
+
+### Documentation
+
+- Added comprehensive Confirmation Fields example guide
+- Added complete Auto-save & Draft Recovery guide with multiple storage adapters
+- Updated API documentation with new field matching and auto-save options
+- Enhanced README with new feature examples
+- Added test coverage for field matching and auto-save functionality
+
 ## [1.1.1] - 2025-11-07
 
 ### Documentation
