@@ -38,6 +38,33 @@ npm install react-native-fn-forms
 yarn add react-native-fn-forms
 ```
 
+## 📚 Documentation
+
+### API Documentation
+
+- 🎯 **[useSmartForm Hook](docs/api/useSmartForm.md)** - Main form management hook
+- 📦 **[SmartFormField Component](docs/api/SmartFormField.md)** - Pre-built form field component
+- 🔐 **[SmartOTPField Component](docs/api/SmartOTPField.md)** - OTP verification component
+
+### Guides
+
+- 📋 **[Field Types Guide](docs/guides/field-types.md)** - All 14 field types with examples
+- ✅ **[Validation Guide](docs/guides/validation.md)** - Advanced validation patterns
+- 🎨 **[Styling Guide](docs/guides/styling.md)** - Customization and theming
+- 🔐 **[OTP Guide](docs/guides/otp.md)** - Complete OTP implementation guide
+
+### Examples
+
+- 🔐 **[Login Form](docs/examples/login-form.md)** - Complete login form example
+- 📝 **[Signup Form](docs/examples/signup-form.md)** - Registration form with validation
+- 💳 **[Payment Form](docs/examples/payment-form.md)** - Credit card payment form
+
+### Additional Resources
+
+- 🗺️ **[Roadmap](docs/ROADMAP.md)** - Upcoming features and improvements
+- 📝 **[Changelog](CHANGELOG.md)** - Version history
+- 🤝 **[Contributing](CONTRIBUTING.md)** - How to contribute
+
 ## 📖 Quick Start
 
 ```typescript
@@ -202,33 +229,6 @@ Full control over appearance and behavior:
 ```
 
 📖 **[See styling guide →](docs/guides/styling.md)**
-
-## 📚 Documentation
-
-### API Documentation
-
-- 🎯 **[useSmartForm Hook](docs/api/useSmartForm.md)** - Main form management hook
-- 📦 **[SmartFormField Component](docs/api/SmartFormField.md)** - Pre-built form field component
-- 🔐 **[SmartOTPField Component](docs/api/SmartOTPField.md)** - OTP verification component
-
-### Guides
-
-- 📋 **[Field Types Guide](docs/guides/field-types.md)** - All 14 field types with examples
-- ✅ **[Validation Guide](docs/guides/validation.md)** - Advanced validation patterns
-- 🎨 **[Styling Guide](docs/guides/styling.md)** - Customization and theming
-- 🔐 **[OTP Guide](docs/guides/otp.md)** - Complete OTP implementation guide
-
-### Examples
-
-- 🔐 **[Login Form](docs/examples/login-form.md)** - Complete login form example
-- 📝 **[Signup Form](docs/examples/signup-form.md)** - Registration form with validation
-- 💳 **[Payment Form](docs/examples/payment-form.md)** - Credit card payment form
-
-### Additional Resources
-
-- 🗺️ **[Roadmap](docs/ROADMAP.md)** - Upcoming features and improvements
-- 📝 **[Changelog](CHANGELOG.md)** - Version history
-- 🤝 **[Contributing](CONTRIBUTING.md)** - How to contribute
 
 ## 🤝 Contributing
 
