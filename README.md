@@ -18,8 +18,6 @@
 - ✅ **Zero Native Dependencies** - Pure JavaScript, easy installation
 - ✅ **Performance Optimized** - Minimal re-renders, efficient validation
 
-A pure JavaScript React Native library that provides smart, real-time form validation with built-in validators for common field types like names, emails, phone numbers, OTP codes, and more.
-
 ## ✨ Features
 
 - 🧠 **Smart Field Validation** - Built-in validators for common field types (name, email, phone, etc.)
@@ -154,180 +152,83 @@ const OTPVerification = () => {
 | `password`      | Passwords                                        | ❌ No formatting               | ✅ Strength requirements       |
 | `otp`           | OTP codes (4/6/8 digits)                         | ❌ No formatting               | ✅ Numeric validation          |
 
-## 🛠 Advanced Usage
+## 🔥 Key Features
 
-### Custom Validation
+### Validation Modes
 
-```typescript
-const form = useSmartForm({
-  fields: {
-    username: {
-      type: 'username',
-      required: true,
-      minLength: 3,
-      customValidation: async value => {
-        const isAvailable = await checkUsernameAvailability(value);
-        return isAvailable ? null : 'Username is already taken';
-      },
-    },
-  },
-});
-```
-
-### Password Strength Validation
-
-```typescript
-const form = useSmartForm({
-  fields: {
-    password: {
-      type: 'password',
-      required: true,
-      customValidation: value => {
-        const strength = validators.passwordStrength({
-          minLength: 8,
-          uppercase: 1,
-          lowercase: 1,
-          numbers: 1,
-          specialChars: 1,
-        });
-        const result = strength(value);
-        return result ? result.message : null;
-      },
-    },
-  },
-});
-```
-
-### Real-time Validation Settings
+Choose how and when validation happens:
 
 ```typescript
 const form = useSmartForm({
   validation: {
-    mode: 'onChange', // 'onChange' | 'onBlur' | 'onSubmit'
-    debounce: 300, // milliseconds
-    showErrorsOn: 'touched', // 'immediate' | 'touched' | 'submit'
+    mode: 'onChange', // Validate as user types
+    debounce: 300, // Wait 300ms after typing stops
+    showErrorsOn: 'touched', // Show errors after field interaction
   },
   fields: {
-    // ... your fields
+    /* ... */
   },
 });
 ```
 
-### Platform-specific Input Props
+### Custom Validation
+
+Add your own validation logic, including async validation:
 
 ```typescript
-const form = useSmartForm({
-  fields: {
-    email: {
-      type: 'email',
-      inputProps: {
-        keyboardType: 'email-address',
-        autoCapitalize: 'none',
-        autoComplete: 'email',
-        textContentType: 'emailAddress', // iOS
-      },
-    },
-  },
-});
+username: {
+  type: 'username',
+  required: true,
+  customValidation: async (value) => {
+    const available = await checkAvailability(value);
+    return available ? null : 'Username taken';
+  }
+}
 ```
 
-## 🎨 Custom Components
+📖 **[See advanced validation patterns →](docs/guides/validation.md)**
 
-You can create your own form field components:
+### Custom Styling & Components
+
+Full control over appearance and behavior:
 
 ```typescript
-import { useFormContext } from 'react-native-fn-forms';
-
-const CustomField = ({ name, ...props }) => {
-  const form = useFormContext();
-  const fieldProps = form.getFieldProps(name);
-
-  return (
-    <TextInput
-      {...fieldProps}
-      {...props}
-      style={[
-        styles.input,
-        fieldProps.error && styles.errorInput
-      ]}
-    />
-  );
-};
+<SmartFormField
+  name="email"
+  style={styles.field}
+  inputStyle={styles.input}
+  errorStyle={styles.error}
+/>
 ```
 
-## ♿ Accessibility
+📖 **[See styling guide →](docs/guides/styling.md)**
 
-Built-in accessibility features:
+## 📚 Documentation
 
-```typescript
-const form = useSmartForm({
-  accessibility: {
-    announceErrors: true, // Screen reader announcements
-    errorSummary: true, // Error summary at top
-    fieldLabeling: 'enhanced', // Enhanced ARIA labels
-  },
-  fields: {
-    name: {
-      type: 'personName',
-      accessibility: {
-        label: 'Full name input field',
-        hint: 'Enter your first and last name',
-        role: 'text',
-      },
-    },
-  },
-});
-```
+### API Documentation
 
-## 📚 API Reference
+- 🎯 **[useSmartForm Hook](docs/api/useSmartForm.md)** - Main form management hook
+- 📦 **[SmartFormField Component](docs/api/SmartFormField.md)** - Pre-built form field component
+- 🔐 **[SmartOTPField Component](docs/api/SmartOTPField.md)** - OTP verification component
 
-### `useSmartForm(config)`
+### Guides
 
-Main hook for form management.
+- 📋 **[Field Types Guide](docs/guides/field-types.md)** - All 14 field types with examples
+- ✅ **[Validation Guide](docs/guides/validation.md)** - Advanced validation patterns
+- 🎨 **[Styling Guide](docs/guides/styling.md)** - Customization and theming
+- 🔐 **[OTP Guide](docs/guides/otp.md)** - Complete OTP implementation guide
 
-**Parameters:**
+### Examples
 
-- `config: FormConfig` - Form configuration object
+- 🔐 **[Login Form](docs/examples/login-form.md)** - Complete login form example
+- 📝 **[Signup Form](docs/examples/signup-form.md)** - Registration form with validation
+- 💳 **[Payment Form](docs/examples/payment-form.md)** - Credit card payment form
 
-**Returns:** `SmartFormHook` object with:
+### Additional Resources
 
-- `values` - Current form values
-- `errors` - Current form errors
-- `touched` - Fields that have been interacted with
-- `isSubmitting` - Form submission state
-- `isValid` - Overall form validation state
-- `setFieldValue(field, value)` - Set field value
-- `setFieldError(field, error)` - Set field error
-- `setFieldTouched(field, touched)` - Mark field as touched
-- `validateField(field)` - Validate single field
-- `validateForm()` - Validate entire form
-- `resetForm()` - Reset form to initial state
-- `submitForm()` - Submit form with validation
-- `getFieldProps(field)` - Get props for input component
-
-### `FormProvider`
-
-Context provider for form state.
-
-### `SmartFormField`
-
-Pre-built input component with built-in validation display.
-
-### `SmartOTPField`
-
-Specialized OTP input component with SMS auto-fill and mobile optimizations.
-
-**Props:**
-
-- `name: string` - Field name for form integration
-- `label?: string` - Optional label text
-- `length?: number` - OTP length (4, 6, or 8 digits) - defaults to 6
-- `autoFocus?: boolean` - Auto-focus first input on mount
-- `autoSubmit?: boolean` - Auto-submit when OTP is complete
-- `onComplete?: (code: string) => void` - Callback when OTP entry is complete
-- `cellStyle?: ViewStyle` - Custom styling for OTP input cells
-- `labelStyle?: TextStyle` - Custom styling for the label
-- `...otherProps` - Additional props passed to the container
+- 🗺️ **[Roadmap](docs/ROADMAP.md)** - Upcoming features and improvements
+- 📝 **[Changelog](CHANGELOG.md)** - Version history
+- 🤝 **[Contributing](CONTRIBUTING.md)** - How to contribute
 
 ## 🤝 Contributing
 
@@ -342,7 +243,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - ⭐ Star this repo if you find it helpful
 - 🐛 [Report bugs](https://github.com/Fiyaz6772/react-native-fn-forms/issues)
 - 💡 [Request features](https://github.com/Fiyaz6772/react-native-fn-forms/issues)
-- 📖 [Read the docs](https://github.com/Fiyaz6772/react-native-fn-forms#readme)
+- 📖 [Read the docs](docs/)
 
 ---
 
