@@ -291,6 +291,181 @@ export default LoginForm;
 
 ---
 
+## Enhanced Version with Icons
+
+```typescript
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {
+  useSmartForm,
+  FormProvider,
+  SmartFormField,
+} from 'react-native-fn-forms';
+
+const LoginFormWithIcons = ({ onLoginSuccess }) => {
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const form = useSmartForm({
+    fields: {
+      email: {
+        type: 'email',
+        required: true,
+        maxLength: 100,
+        inputProps: {
+          autoCapitalize: 'none',
+          autoComplete: 'email',
+          keyboardType: 'email-address',
+        },
+      },
+      password: {
+        type: 'password',
+        required: true,
+        minLength: 8,
+        inputProps: {
+          autoCapitalize: 'none',
+          autoComplete: 'password',
+        },
+      },
+    },
+  });
+
+  const handleLogin = async () => {
+    await form.submitForm();
+
+    if (!form.isValid) {
+      Alert.alert('Validation Error', 'Please fix the errors');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Simulate API call
+      const response = await fetch('https://api.example.com/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: form.values.email,
+          password: form.values.password,
+          rememberMe,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        onLoginSuccess?.(data);
+      } else {
+        form.setFieldError('email', data.message || 'Invalid credentials');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <FormProvider value={form}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.subtitle}>Sign in to continue</Text>
+
+        <SmartFormField
+          name="email"
+          label="Email Address"
+          placeholder="you@example.com"
+          leftIcon={<Icon name="email" size={20} color="#666" />}
+          rightIcon={
+            form.values.email ? (
+              <Icon name="clear" size={20} color="#999" />
+            ) : null
+          }
+          onRightIconPress={() => form.setFieldValue('email', '')}
+          style={styles.field}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+          errorStyle={styles.error}
+        />
+
+        <SmartFormField
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+          secureTextEntry={!showPassword}
+          leftIcon={<Icon name="lock" size={20} color="#666" />}
+          rightIcon={
+            <Icon
+              name={showPassword ? 'visibility' : 'visibility-off'}
+              size={20}
+              color="#666"
+            />
+          }
+          onRightIconPress={() => setShowPassword(!showPassword)}
+          style={styles.field}
+          labelStyle={styles.label}
+          inputStyle={styles.input}
+          errorStyle={styles.error}
+        />
+
+        <View style={styles.rememberMeContainer}>
+          <TouchableOpacity
+            style={styles.checkbox}
+            onPress={() => setRememberMe(!rememberMe)}
+          >
+            <View
+              style={[
+                styles.checkboxBox,
+                rememberMe && styles.checkboxBoxChecked,
+              ]}
+            >
+              {rememberMe && <Text style={styles.checkmark}>✓</Text>}
+            </View>
+            <Text style={styles.checkboxLabel}>Remember me</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+            <Text style={styles.forgotPassword}>Forgot Password?</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.loginButton, isLoading && styles.loginButtonDisabled]}
+          onPress={handleLogin}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.loginButtonText}>Login</Text>
+          )}
+        </TouchableOpacity>
+
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>Don't have an account? </Text>
+          <TouchableOpacity>
+            <Text style={styles.signupLink}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </FormProvider>
+  );
+};
+
+export default LoginFormWithIcons;
+```
+
+---
+
 ## Key Features Explained
 
 ### 1. Email Validation

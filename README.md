@@ -10,6 +10,7 @@
 
 - ✅ **10+ Built-in Validators** - Email, phone, credit card, names, addresses, etc.
 - ✅ **OTP Verification** - Complete OTP input component with SMS auto-fill
+- ✅ **Icon Support** - Left/right icons with interactive features (password toggle, clear buttons)
 - ✅ **Smart Auto-formatting** - Phone numbers, credit cards format automatically
 - ✅ **Real-time Validation** - Instant feedback with customizable debouncing
 - ✅ **TypeScript First** - Full type safety and IntelliSense support
@@ -22,6 +23,7 @@
 
 - 🧠 **Smart Field Validation** - Built-in validators for common field types (name, email, phone, etc.)
 - 🔐 **OTP Verification** - Complete OTP component with SMS auto-fill (iOS/Android)
+- 🎨 **Icon Support** - Left/right icons with interactive handlers (password toggle, clear button, etc.)
 - ⚡ **Real-time Validation** - Debounced validation with customizable timing
 - 🎯 **React Native Optimized** - Platform-specific input props and keyboard handling
 - 📱 **Cross-platform** - Works on iOS, Android, and React Native Web
@@ -165,7 +167,54 @@ const OTPVerification = () => {
 };
 ```
 
-## �🔍 Built-in Field Types
+### 🎨 Fields with Icons
+
+```typescript
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const LoginForm = () => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const form = useSmartForm({
+    fields: {
+      email: { type: 'email', required: true },
+      password: { type: 'password', required: true }
+    }
+  });
+
+  return (
+    <FormProvider value={form}>
+      <View style={{ padding: 20 }}>
+        <SmartFormField
+          name="email"
+          label="Email"
+          placeholder="Enter your email"
+          leftIcon={<Icon name="email" size={20} color="#666" />}
+        />
+
+        <SmartFormField
+          name="password"
+          label="Password"
+          placeholder="Enter password"
+          secureTextEntry={!showPassword}
+          leftIcon={<Icon name="lock" size={20} color="#666" />}
+          rightIcon={
+            <Icon
+              name={showPassword ? 'visibility' : 'visibility-off'}
+              size={20}
+              color="#666"
+            />
+          }
+          onRightIconPress={() => setShowPassword(!showPassword)}
+        />
+
+        <Button title="Login" onPress={() => form.submitForm()} />
+      </View>
+    </FormProvider>
+  );
+};
+```
+
+## 🔍 Built-in Field Types
 
 | Field Type      | Description                                      | Auto-formatting                | Validation                     |
 | --------------- | ------------------------------------------------ | ------------------------------ | ------------------------------ |

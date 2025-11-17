@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2025-11-17
+
+### Added
+
+- **Icon Support for SmartFormField** - Enhanced input fields with left and right icon capabilities
+  - `leftIcon` prop - accepts ReactElement or function returning ReactElement
+  - `rightIcon` prop - accepts ReactElement or function returning ReactElement
+  - `onLeftIconPress` callback for interactive left icons
+  - `onRightIconPress` callback for interactive right icons (password toggle, clear button, etc.)
+  - `leftIconStyle` prop for custom left icon container styling
+  - `rightIconStyle` prop for custom right icon container styling
+  - `inputContainerStyle` prop for wrapper container customization
+  - Smart wrapper logic: TouchableOpacity for interactive icons, View for static icons
+  - Support for Vector Icons, SVG, Images, Text, and Emoji icons
+  - Function-based dynamic icons that respond to form state
+
+### Enhanced
+
+- **TypeScript Types** - Added comprehensive `SmartFormFieldProps` interface with detailed JSDoc comments
+  - Full type definitions for all icon-related props
+  - Improved IntelliSense support for icon usage patterns
+  - Extended type exports for better developer experience
+
+### Documentation
+
+- **Comprehensive Icon Examples** - Added extensive icon usage documentation
+  - Updated SmartFormField API documentation with icon props and 7+ usage examples
+  - Added "Enhanced Version with Icons" sections to login, signup, and payment form examples
+  - Updated main README with icon feature highlights and quick start example
+  - Documented common patterns: password toggle, clear button, validation indicators, search icons
+  - Added icon styling customization examples
+- **Test Coverage** - Added comprehensive test suite for icon functionality
+  - Icon rendering tests (ReactElement and function-based)
+  - Interactive icon press handler tests
+  - Password visibility toggle test
+  - Clear button functionality test
+  - Icon styling tests
+  - Dynamic icon state change tests
+
+### Use Cases Demonstrated
+
+- Password visibility toggle with eye icon
+- Clear button with conditional rendering
+- Email validation checkmark indicator
+- Search field with magnifying glass icon
+- Phone field with country code picker
+- Credit card type badge display
+- Lock icons for secure fields
+- Calendar icon for date inputs
+
 ## [1.2.0] - 2025-11-14
 
 ### Added

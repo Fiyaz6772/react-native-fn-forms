@@ -1,3 +1,6 @@
+import { ReactElement } from 'react';
+import { TextInputProps, ViewStyle } from 'react-native';
+
 export type FieldType =
   | 'text'
   | 'email'
@@ -124,4 +127,55 @@ export interface SmartFormHook {
   loadDraft: (draft?: DraftData) => void;
   clearDraft: () => Promise<void>;
   hasDraft: () => Promise<boolean>;
+}
+
+/**
+ * Props for SmartFormField component with icon support
+ * Extends React Native TextInput props while providing additional functionality
+ */
+export interface SmartFormFieldProps
+  extends Omit<TextInputProps, 'value' | 'onChangeText' | 'onBlur'> {
+  /** Field name (must match a key in form fields configuration) */
+  name: string;
+  /** Placeholder text for the input */
+  placeholder?: string;
+  /** Style for the outer container */
+  style?: any;
+  /** Style for error text */
+  errorStyle?: any;
+  /** Label text displayed above the input */
+  label?: string;
+  /** Style for the label text */
+  labelStyle?: any;
+  /** Input style for the TextInput component */
+  inputStyle?: any;
+  /**
+   * Left icon - can be a React element or a function that returns a React element
+   * @example <Icon name="email" size={20} color="#666" />
+   * @example () => <CustomIcon />
+   */
+  leftIcon?: ReactElement | (() => ReactElement);
+  /**
+   * Right icon - can be a React element or a function that returns a React element
+   * @example <Icon name="visibility" size={20} color="#666" />
+   * @example () => <Icon name={showPassword ? 'visibility' : 'visibility-off'} />
+   */
+  rightIcon?: ReactElement | (() => ReactElement);
+  /**
+   * Callback when left icon is pressed
+   * If provided, the icon will be wrapped in a TouchableOpacity
+   */
+  onLeftIconPress?: () => void;
+  /**
+   * Callback when right icon is pressed
+   * If provided, the icon will be wrapped in a TouchableOpacity
+   * @example onRightIconPress={() => setShowPassword(!showPassword)}
+   */
+  onRightIconPress?: () => void;
+  /** Style for the left icon container */
+  leftIconStyle?: ViewStyle;
+  /** Style for the right icon container */
+  rightIconStyle?: ViewStyle;
+  /** Style for the input container wrapper (contains icons and TextInput) */
+  inputContainerStyle?: ViewStyle;
 }

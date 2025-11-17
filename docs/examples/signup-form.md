@@ -471,6 +471,96 @@ const getPasswordStrength = () => {
 </View>
 ```
 
+---
+
+## Enhanced Version with Icons
+
+```typescript
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const SignupFormWithIcons = ({ onSignupSuccess }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // ...form setup...
+
+  return (
+    <FormProvider value={form}>
+      <ScrollView style={styles.container}>
+        <Text style={styles.title}>Create Account</Text>
+
+        <SmartFormField
+          name="fullName"
+          label="Full Name"
+          placeholder="John Doe"
+          leftIcon={<Icon name="person" size={20} color="#666" />}
+          style={styles.field}
+        />
+
+        <SmartFormField
+          name="email"
+          label="Email Address"
+          placeholder="you@example.com"
+          leftIcon={<Icon name="email" size={20} color="#666" />}
+          rightIcon={
+            form.touched.email && !form.errors.email ? (
+              <Icon name="check-circle" size={20} color="green" />
+            ) : null
+          }
+          style={styles.field}
+        />
+
+        <SmartFormField
+          name="phone"
+          label="Phone Number"
+          placeholder="(123) 456-7890"
+          leftIcon={<Icon name="phone" size={20} color="#666" />}
+          style={styles.field}
+        />
+
+        <SmartFormField
+          name="password"
+          label="Password"
+          placeholder="Create a strong password"
+          secureTextEntry={!showPassword}
+          leftIcon={<Icon name="lock" size={20} color="#666" />}
+          rightIcon={
+            <Icon
+              name={showPassword ? 'visibility' : 'visibility-off'}
+              size={20}
+              color="#666"
+            />
+          }
+          onRightIconPress={() => setShowPassword(!showPassword)}
+          style={styles.field}
+        />
+
+        <SmartFormField
+          name="confirmPassword"
+          label="Confirm Password"
+          placeholder="Re-enter your password"
+          secureTextEntry={!showConfirmPassword}
+          leftIcon={<Icon name="lock-outline" size={20} color="#666" />}
+          rightIcon={
+            <Icon
+              name={showConfirmPassword ? 'visibility' : 'visibility-off'}
+              size={20}
+              color="#666"
+            />
+          }
+          onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
+          style={styles.field}
+        />
+
+        {/* Rest of the form... */}
+      </ScrollView>
+    </FormProvider>
+  );
+};
+```
+
+---
+
 ### 3. Async Email Validation
 
 ```typescript

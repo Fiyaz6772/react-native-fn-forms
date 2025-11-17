@@ -451,6 +451,62 @@ export default PaymentForm;
 
 ---
 
+## Enhanced Version with Icons
+
+```typescript
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+// Inside the form component
+<SmartFormField
+  name="cardholderName"
+  label="Cardholder Name"
+  placeholder="John Doe"
+  leftIcon={<Icon name="person" size={20} color="#666" />}
+  style={styles.field}
+/>
+
+<SmartFormField
+  name="cardNumber"
+  label="Card Number"
+  placeholder="1234 5678 9012 3456"
+  leftIcon={<Icon name="credit-card" size={20} color="#666" />}
+  rightIcon={
+    cardType ? (
+      <Text style={styles.cardTypeBadge}>{cardType.toUpperCase()}</Text>
+    ) : null
+  }
+  style={styles.field}
+/>
+
+<View style={styles.row}>
+  <SmartFormField
+    name="expiryDate"
+    label="Expiry Date"
+    placeholder="MM/YY"
+    leftIcon={<Icon name="calendar-today" size={18} color="#666" />}
+    style={[styles.field, styles.halfField]}
+  />
+
+  <SmartFormField
+    name="cvv"
+    label="CVV"
+    placeholder="123"
+    leftIcon={<Icon name="lock" size={18} color="#666" />}
+    style={[styles.field, styles.halfField]}
+  />
+</View>
+
+<SmartFormField
+  name="zipCode"
+  label="Billing ZIP Code"
+  placeholder="12345"
+  leftIcon={<Icon name="location-on" size={20} color="#666" />}
+  style={styles.field}
+/>
+```
+
+---
+
 ## Key Features Explained
 
 ### 1. Credit Card Validation

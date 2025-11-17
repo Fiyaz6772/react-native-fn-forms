@@ -25,15 +25,21 @@ import { SmartFormField } from 'react-native-fn-forms';
 
 ## Props
 
-| Prop          | Type        | Required | Default | Description                             |
-| ------------- | ----------- | -------- | ------- | --------------------------------------- |
-| `name`        | `string`    | Yes      | -       | Field name (must match field in config) |
-| `label`       | `string`    | No       | -       | Label text displayed above input        |
-| `placeholder` | `string`    | No       | -       | Placeholder text for input              |
-| `style`       | `ViewStyle` | No       | -       | Custom style for input container        |
-| `inputStyle`  | `TextStyle` | No       | -       | Custom style for TextInput              |
-| `errorStyle`  | `TextStyle` | No       | -       | Custom style for error text             |
-| `labelStyle`  | `TextStyle` | No       | -       | Custom style for label text             |
+| Prop                  | Type                                 | Required | Default | Description                              |
+| --------------------- | ------------------------------------ | -------- | ------- | ---------------------------------------- |
+| `name`                | `string`                             | Yes      | -       | Field name (must match field in config)  |
+| `label`               | `string`                             | No       | -       | Label text displayed above input         |
+| `placeholder`         | `string`                             | No       | -       | Placeholder text for input               |
+| `style`               | `TextStyle`                          | No       | -       | Custom style for TextInput               |
+| `errorStyle`          | `TextStyle`                          | No       | -       | Custom style for error text              |
+| `labelStyle`          | `TextStyle`                          | No       | -       | Custom style for label text              |
+| `leftIcon`            | `ReactElement \| () => ReactElement` | No       | -       | Icon component to display on the left    |
+| `rightIcon`           | `ReactElement \| () => ReactElement` | No       | -       | Icon component to display on the right   |
+| `onLeftIconPress`     | `() => void`                         | No       | -       | Callback when left icon is pressed       |
+| `onRightIconPress`    | `() => void`                         | No       | -       | Callback when right icon is pressed      |
+| `leftIconStyle`       | `ViewStyle`                          | No       | -       | Custom style for left icon container     |
+| `rightIconStyle`      | `ViewStyle`                          | No       | -       | Custom style for right icon container    |
+| `inputContainerStyle` | `ViewStyle`                          | No       | -       | Custom style for input wrapper container |
 
 **Note:** `SmartFormField` accepts all standard React Native `TextInput` props (e.g., `secureTextEntry`, `keyboardType`, `autoCapitalize`, `maxLength`, `multiline`, etc.) in addition to the props listed above.
 
@@ -190,70 +196,278 @@ const ThemedFormField = ({ name, label, placeholder }) => {
 
 ### With Icons
 
+You can add left and/or right icons to your form fields. Icons can be React elements or functions that return React elements.
+
+#### Using React Native Vector Icons
+
 ```typescript
-import { View, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { SmartFormField } from 'react-native-fn-forms';
 
-const EmailField = () => {
-  return (
-    <View style={styles.container}>
-      <Icon name="mail-outline" size={20} style={styles.icon} />
-      <SmartFormField
-        name="email"
-        label="Email"
-        placeholder="you@example.com"
-        style={styles.field}
-      />
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  icon: {
-    marginRight: 10,
-    color: '#666',
-  },
-  field: {
-    flex: 1,
-  },
-});
+<SmartFormField
+  name="email"
+  label="Email Address"
+  placeholder="Enter your email"
+  leftIcon={<Icon name="email" size={20} color="#666" />}
+  rightIcon={<Icon name="check-circle" size={20} color="#4caf50" />}
+/>
 ```
 
-### With Visibility Toggle (Password)
+#### Using Custom SVG Icons
+
+```typescript
+import { SvgIcon } from './components/SvgIcon';
+
+<SmartFormField
+  name="password"
+  label="Password"
+  placeholder="Enter password"
+  leftIcon={<SvgIcon name="lock" width={20} height={20} />}
+/>
+```
+
+#### Using Image Icons
+
+```typescript
+import { Image } from 'react-native';
+
+<SmartFormField
+  name="username"
+  label="Username"
+  leftIcon={
+    <Image
+      source={require('./assets/user-icon.png')}
+      style={{ width: 20, height: 20 }}
+    />
+  }
+/>
+```
+
+#### Interactive Icons (Password Toggle)
 
 ```typescript
 import { useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const PasswordField = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <View style={{ position: 'relative' }}>
-      <SmartFormField
-        name="password"
-        label="Password"
-        placeholder="Enter password"
-        secureTextEntry={!showPassword}
-      />
-      <TouchableOpacity
-        style={styles.eyeIcon}
-        onPress={() => setShowPassword(!showPassword)}
-      >
+    <SmartFormField
+      name="password"
+      label="Password"
+      placeholder="Enter password"
+      secureTextEntry={!showPassword}
+      leftIcon={<Icon name="lock" size={20} color="#666" />}
+      rightIcon={
         <Icon
-          name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+          name={showPassword ? 'visibility' : 'visibility-off'}
           size={20}
+          color="#666"
         />
-      </TouchableOpacity>
-    </View>
+      }
+      onRightIconPress={() => setShowPassword(!showPassword)}
+    />
   );
 };
 ```
+
+#### Clear Button
+
+```typescript
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const form = useSmartForm({ /* ... */ });
+
+<SmartFormField
+  name="search"
+  placeholder="Search..."
+  leftIcon={<Icon name="search" size={20} color="#666" />}
+  rightIcon={
+    form.values.search ? (
+      <Icon name="clear" size={20} color="#666" />
+    ) : null
+  }
+  onRightIconPress={() => form.setFieldValue('search', '')}
+/>
+```
+
+#### Function-based Icons
+
+```typescript
+<SmartFormField
+  name="email"
+  label="Email"
+  leftIcon={() => <Icon name="email" size={20} color="#666" />}
+  rightIcon={() => {
+    const hasValue = form.values.email?.length > 0;
+    return hasValue ? <Icon name="check" size={20} color="green" /> : null;
+  }}
+/>
+```
+
+#### Icon Styling
+
+```typescript
+<SmartFormField
+  name="phone"
+  label="Phone Number"
+  leftIcon={<Icon name="phone" size={20} color="#666" />}
+  leftIconStyle={{
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    padding: 4,
+  }}
+  rightIcon={<Icon name="clear" size={20} color="#666" />}
+  rightIconStyle={{
+    padding: 8,
+  }}
+/>
+```
+
+#### Both Icons with Actions
+
+```typescript
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+<SmartFormField
+  name="email"
+  label="Email Address"
+  placeholder="Enter email"
+  leftIcon={<Icon name="email" size={20} color="#666" />}
+  rightIcon={<Icon name="clear" size={20} color="#666" />}
+  onRightIconPress={() => form.setFieldValue('email', '')}
+/>
+```
+
+### Complete Example with Icons
+
+```typescript
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useSmartForm, FormProvider, SmartFormField } from 'react-native-fn-forms';
+
+const LoginFormWithIcons = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const form = useSmartForm({
+    fields: {
+      email: { type: 'email', required: true },
+      password: { type: 'password', required: true, minLength: 8 },
+    },
+  });
+
+  return (
+    <FormProvider value={form}>
+      <View style={styles.container}>
+        <SmartFormField
+          name="email"
+          label="Email Address"
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          leftIcon={<Icon name="email" size={20} color="#666" />}
+          rightIcon={
+            form.values.email ? (
+              <Icon name="clear" size={20} color="#999" />
+            ) : null
+          }
+          onRightIconPress={() => form.setFieldValue('email', '')}
+        />
+
+        <SmartFormField
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+          secureTextEntry={!showPassword}
+          leftIcon={<Icon name="lock" size={20} color="#666" />}
+          rightIcon={
+            <Icon
+              name={showPassword ? 'visibility' : 'visibility-off'}
+              size={20}
+              color="#666"
+            />
+          }
+          onRightIconPress={() => setShowPassword(!showPassword)}
+        />
+      </View>
+    </FormProvider>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+});
+```
+
+---
+
+## Icon Use Cases
+
+### Common Patterns
+
+#### Email Field with Clear Button
+
+```typescript
+<SmartFormField
+  name="email"
+  placeholder="Email"
+  leftIcon={<Icon name="email" size={20} color="#666" />}
+  rightIcon={form.values.email ? <Icon name="clear" size={18} /> : null}
+  onRightIconPress={() => form.setFieldValue('email', '')}
+/>
+```
+
+#### Search Field
+
+```typescript
+<SmartFormField
+  name="search"
+  placeholder="Search..."
+  leftIcon={<Icon name="search" size={20} color="#666" />}
+/>
+```
+
+#### Phone Field with Country Code
+
+```typescript
+<SmartFormField
+  name="phone"
+  placeholder="Phone number"
+  leftIcon={<Text style={{ fontSize: 16, color: '#666' }}>🇺🇸 +1</Text>}
+  keyboardType="phone-pad"
+/>
+```
+
+#### Password with Strength Indicator
+
+```typescript
+<SmartFormField
+  name="password"
+  placeholder="Password"
+  secureTextEntry={!showPassword}
+  leftIcon={<Icon name="lock" size={20} color="#666" />}
+  rightIcon={
+    passwordStrength === 'strong' ? (
+      <Icon name="check-circle" size={20} color="green" />
+    ) : (
+      <Icon
+        name={showPassword ? 'visibility' : 'visibility-off'}
+        size={20}
+        color="#666"
+      />
+    )
+  }
+  onRightIconPress={() => setShowPassword(!showPassword)}
+/>
+```
+
+---
+
+## Advanced Usage
 
 ### Conditional Rendering
 
