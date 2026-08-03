@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { useFormContext } from '../context/FormContext';
 
+import { CountryCode } from '../types';
+
 interface SmartFormFieldProps extends Omit<TextInputProps, 'value' | 'onChangeText' | 'onBlur'> {
   name: string;
   placeholder?: string;
@@ -24,6 +26,7 @@ interface SmartFormFieldProps extends Omit<TextInputProps, 'value' | 'onChangeTe
   leftIconStyle?: ViewStyle;
   rightIconStyle?: ViewStyle;
   inputContainerStyle?: ViewStyle;
+  countryCode?: CountryCode;
 }
 
 export const SmartFormField: React.FC<SmartFormFieldProps> = ({
@@ -40,6 +43,7 @@ export const SmartFormField: React.FC<SmartFormFieldProps> = ({
   leftIconStyle,
   rightIconStyle,
   inputContainerStyle,
+  countryCode,
   ...textInputProps
 }) => {
   const form = useFormContext();

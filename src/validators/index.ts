@@ -116,7 +116,13 @@ export const validators = {
       const pattern = PATTERNS[fieldType as keyof typeof PATTERNS];
       if (!pattern) return null;
 
-      const isValid = pattern.test(value);
+      // Strip formatting for phone numbers before validation
+      let testValue = value;
+      if (fieldType === 'phone') {
+        testValue = value.replace(/[\s\(\)\-]/g, ''); // Remove spaces, parentheses, hyphens
+      }
+
+      const isValid = pattern.test(testValue);
 
       return !isValid
         ? {

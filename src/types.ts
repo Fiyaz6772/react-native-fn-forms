@@ -24,6 +24,24 @@ export interface ValidationRule {
   suggestion?: string;
 }
 
+export type CountryCode =
+  | 'US'
+  | 'CA' // North America
+  | 'GB'
+  | 'DE'
+  | 'FR'
+  | 'ES'
+  | 'IT' // Europe
+  | 'IN'
+  | 'CN'
+  | 'JP'
+  | 'PK'
+  | 'AE' // Asia
+  | 'AU'
+  | 'BR'
+  | 'MX'
+  | 'ZA'; // Other
+
 export interface FieldConfig {
   type: FieldType;
   required?: boolean;
@@ -48,6 +66,8 @@ export interface FieldConfig {
   // Field matching for confirmation fields
   matchField?: string;
   matchErrorMessage?: string;
+  // Phone-specific properties
+  countryCode?: CountryCode;
 }
 
 export interface StorageAdapter {
@@ -178,4 +198,11 @@ export interface SmartFormFieldProps
   rightIconStyle?: ViewStyle;
   /** Style for the input container wrapper (contains icons and TextInput) */
   inputContainerStyle?: ViewStyle;
+  /**
+   * Country code for phone number formatting (only applies to 'phone' field type)
+   * If not provided, no formatting will be applied and user input is preserved as-is
+   * @example 'US' for United States format: (555) 123-4567
+   * @example 'GB' for UK format: +44 7911 123456
+   */
+  countryCode?: CountryCode;
 }

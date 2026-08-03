@@ -5,6 +5,79 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2025-11-20
+
+### Fixed
+
+- **OTP Auto-Navigation** - Fixed SmartOTPField auto-focus behavior
+  - Now automatically moves to next input when entering a digit
+  - Automatically moves to previous input when deleting (backspace on empty field)
+  - Improved backspace handling: clears current cell first, then moves back
+  - Reduced setTimeout delays from 50ms to 10ms for smoother transitions
+  - Removed unnecessary text selection logic that caused focus issues
+  - Users no longer need to manually click each OTP cell
+
+## [1.2.3] - 2025-11-19
+
+### Added
+
+- **Multi-Country Phone Number Formatting** - Automatic phone number formatting for 14+ countries
+  - Support for North America: US, CA (United States, Canada)
+  - Support for Europe: GB, DE, FR, ES, IT (UK, Germany, France, Spain, Italy)
+  - Support for Asia: IN, CN, JP, PK, AE (India, China, Japan, Pakistan, UAE)
+  - Support for Other Regions: AU, BR, MX, ZA (Australia, Brazil, Mexico, South Africa)
+  - New `countryCode` prop on `SmartFormField` component
+  - New `countryCode` option in `FieldConfig` type
+  - New `CountryCode` type export for TypeScript users
+  - **Opt-in behavior**: Formatting only applies when `countryCode` is explicitly provided
+  - **Preserves user input**: Without country code, input remains unchanged (backward compatible)
+  - Auto-formats as user types with country-specific patterns
+  - Handles partial input gracefully
+  - Works seamlessly with existing phone validation
+
+### Enhanced
+
+- **Phone Formatter** - Completely rewritten phone formatter with multi-country support
+  - Country-specific formatting patterns for 14+ countries
+  - Smart digit extraction and formatting
+  - Handles both national and international number formats
+  - Preserves incomplete numbers during typing
+  - No formatting applied when country code is omitted (backward compatible)
+
+- **TypeScript Types** - Enhanced type definitions for international phone support
+  - New `CountryCode` type with 14+ country codes
+  - Updated `FieldConfig` interface with optional `countryCode` property
+  - Updated `SmartFormFieldProps` interface with optional `countryCode` property
+  - Updated `getFieldProps` method signature to accept optional country code override
+
+### Documentation
+
+- **Multi-Country Phone Guide** - Comprehensive documentation for international phone formatting
+  - Complete list of supported countries with format examples
+  - Usage examples for static and dynamic country selection
+  - API reference for new props and types
+  - Best practices for international forms
+  - Behavior documentation (with/without country code)
+
+### Testing
+
+- **Comprehensive Phone Format Tests** - Added 25 new tests for multi-country phone formatting
+  - Tests for all 14 supported countries
+  - Tests for preserving user input without country code
+  - Edge case handling (incomplete numbers, existing formatting, empty strings)
+  - All tests passing (69 total tests across 5 test suites)
+
+## [1.2.2] - 2025-11-17
+
+### Fixed
+
+- **Text Input Bug** - Fixed formatter removing trailing spaces during typing
+  - `personName` formatter no longer removes trailing spaces while user is typing
+  - `businessName` formatter no longer removes trailing spaces while user is typing
+  - `streetAddress` formatter no longer removes trailing spaces while user is typing
+  - Users can now type spaces naturally (e.g., "Fiyaz Hussain" works correctly)
+  - Only leading spaces and multiple consecutive spaces are cleaned up
+
 ## [1.2.1] - 2025-11-17
 
 ### Added

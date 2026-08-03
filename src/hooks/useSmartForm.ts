@@ -139,7 +139,9 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
         processedValue = fieldConfig.transform(value);
       } else {
         // Auto-format based on field type
-        processedValue = formatters.auto(value, fieldConfig?.type || 'text');
+        processedValue = formatters.auto(value, fieldConfig?.type || 'text', {
+          countryCode: fieldConfig?.countryCode,
+        });
       }
 
       setValues(prev => ({ ...prev, [fieldName]: processedValue }));

@@ -23,6 +23,7 @@
 
 - 🧠 **Smart Field Validation** - Built-in validators for common field types (name, email, phone, etc.)
 - 🔐 **OTP Verification** - Complete OTP component with SMS auto-fill (iOS/Android)
+- 🌍 **Multi-Country Phone Formatting** - Auto-format phone numbers for 14+ countries (US, UK, India, etc.)
 - 🎨 **Icon Support** - Left/right icons with interactive handlers (password toggle, clear button, etc.)
 - ⚡ **Real-time Validation** - Debounced validation with customizable timing
 - 🎯 **React Native Optimized** - Platform-specific input props and keyboard handling
@@ -54,6 +55,7 @@ yarn add react-native-fn-forms
 - ✅ **[Validation Guide](docs/guides/validation.md)** - Advanced validation patterns
 - 🎨 **[Styling Guide](docs/guides/styling.md)** - Customization and theming
 - 🔐 **[OTP Guide](docs/guides/otp.md)** - Complete OTP implementation guide
+- 🌍 **[Multi-Country Phone Formatting](docs/features/phone-country-formats.md)** - International phone number formatting
 
 ### Examples
 

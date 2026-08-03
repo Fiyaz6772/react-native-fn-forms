@@ -72,46 +72,55 @@ export const SmartOTPField: React.FC<SmartOTPFieldProps> = ({
       const nextIndex = Math.min(pastedCode.length, length - 1);
       setTimeout(() => {
         inputRefs.current[nextIndex]?.focus();
-      }, 50);
+      }, 10);
 
       return;
     }
 
     // Handle single digit input
-    const sanitizedText = text.replace(/[^0-9]/g, '');
+    const sanitizedText = text.replace(/[^0-9]/g, '').slice(0, 1);
     const newValues = [...otpValues];
-    newValues[index] = sanitizedText;
-    setOtpValues(newValues);
 
-    // Auto-advance to next input
-    if (sanitizedText && index < length - 1) {
-      setTimeout(() => {
-        inputRefs.current[index + 1]?.focus();
-      }, 50);
+    // If user is replacing existing digit
+    if (sanitizedText) {
+      newValues[index] = sanitizedText;
+      setOtpValues(newValues);
+
+      // Auto-advance to next input
+      if (index < length - 1) {
+        setTimeout(() => {
+          inputRefs.current[index + 1]?.focus();
+        }, 10);
+      }
+    } else {
+      // If text is empty (backspace was pressed)
+      newValues[index] = '';
+      setOtpValues(newValues);
     }
   };
 
   const handleKeyPress = (e: any, index: number) => {
     // Handle backspace
     if (e.nativeEvent.key === 'Backspace') {
-      if (!otpValues[index] && index > 0) {
-        // Move to previous input if current is empty
+      const newValues = [...otpValues];
+
+      if (otpValues[index]) {
+        // Clear current cell
+        newValues[index] = '';
+        setOtpValues(newValues);
+      } else if (index > 0) {
+        // If current cell is empty, move to previous and clear it
+        newValues[index - 1] = '';
+        setOtpValues(newValues);
         setTimeout(() => {
           inputRefs.current[index - 1]?.focus();
-        }, 50);
+        }, 10);
       }
     }
   };
 
   const handleFocus = (index: number) => {
     setFocusedIndex(index);
-    // Select all text in the input for easy replacement
-    setTimeout(() => {
-      const input = inputRefs.current[index];
-      if (input && 'setSelection' in input) {
-        (input as any).setSelection(0, 1);
-      }
-    }, 50);
   };
 
   const handleBlur = () => {
