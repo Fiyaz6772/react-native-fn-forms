@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { Keyboard } from 'react-native';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { Keyboard, AccessibilityInfo } from 'react-native';
 import { FormConfig, FormValues, FormErrors, FormTouched, SmartFormHook } from '../types';
 import { validators } from '../validators';
 import { formatters } from '../utils/formatters';
@@ -38,8 +38,16 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
   const [touched, setTouched] = useState<FormTouched>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Calculate if form is valid
-  const isValid = Object.keys(errors).length === 0 && Object.keys(touched).length > 0;
+  // Calculate if form is valid: no active errors, and every required field is filled
+  const isValid = useMemo(() => {
+    if (Object.keys(errors).length > 0) return false;
+
+    return Object.keys(config.fields).every(fieldName => {
+      const fieldConfig = config.fields[fieldName];
+      if (!fieldConfig.required) return true;
+      return !validators.required(values[fieldName]);
+    });
+  }, [errors, config.fields, values]);
 
   // Validate individual field
   const validateField = useCallback(
@@ -49,65 +57,70 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
 
       if (!fieldConfig) return null;
 
-      // Check required validation
-      if (fieldConfig.required) {
-        const requiredError = validators.required(value);
-        if (requiredError) {
-          return requiredError.message;
+      try {
+        // Check required validation
+        if (fieldConfig.required) {
+          const requiredError = validators.required(value);
+          if (requiredError) {
+            return requiredError.message;
+          }
         }
-      }
 
-      // Skip other validations if value is empty and not required
-      if (!value && !fieldConfig.required) {
+        // Skip other validations if value is empty and not required
+        if (!value && !fieldConfig.required) {
+          return null;
+        }
+
+        // Check min/max length
+        if (fieldConfig.minLength) {
+          const minLengthError = validators.minLength(fieldConfig.minLength)(value);
+          if (minLengthError) {
+            return minLengthError.message;
+          }
+        }
+
+        if (fieldConfig.maxLength) {
+          const maxLengthError = validators.maxLength(fieldConfig.maxLength)(value);
+          if (maxLengthError) {
+            return maxLengthError.message;
+          }
+        }
+
+        // Check pattern validation
+        const patternError = validators.pattern(fieldConfig.type)(value);
+        if (patternError) {
+          return patternError.message;
+        }
+
+        // Special validations for specific field types
+        if (fieldConfig.type === 'creditCard') {
+          const luhnError = validators.creditCardLuhn(value);
+          if (luhnError) {
+            return luhnError.message;
+          }
+        }
+
+        // Field matching validation (for confirmation fields)
+        if (fieldConfig.matchField) {
+          const matchFieldValue = values[fieldConfig.matchField];
+          if (value !== matchFieldValue) {
+            return fieldConfig.matchErrorMessage || `Must match ${fieldConfig.matchField}`;
+          }
+        }
+
+        // Custom validation
+        if (fieldConfig.customValidation) {
+          const customError = fieldConfig.customValidation(value);
+          if (customError) {
+            return customError;
+          }
+        }
+
         return null;
+      } catch (error) {
+        console.error(`Validation threw for field "${fieldName}":`, error);
+        return 'Something went wrong validating this field';
       }
-
-      // Check min/max length
-      if (fieldConfig.minLength) {
-        const minLengthError = validators.minLength(fieldConfig.minLength)(value);
-        if (minLengthError) {
-          return minLengthError.message;
-        }
-      }
-
-      if (fieldConfig.maxLength) {
-        const maxLengthError = validators.maxLength(fieldConfig.maxLength)(value);
-        if (maxLengthError) {
-          return maxLengthError.message;
-        }
-      }
-
-      // Check pattern validation
-      const patternError = validators.pattern(fieldConfig.type)(value);
-      if (patternError) {
-        return patternError.message;
-      }
-
-      // Special validations for specific field types
-      if (fieldConfig.type === 'creditCard') {
-        const luhnError = validators.creditCardLuhn(value);
-        if (luhnError) {
-          return luhnError.message;
-        }
-      }
-
-      // Field matching validation (for confirmation fields)
-      if (fieldConfig.matchField) {
-        const matchFieldValue = values[fieldConfig.matchField];
-        if (value !== matchFieldValue) {
-          return fieldConfig.matchErrorMessage || `Must match ${fieldConfig.matchField}`;
-        }
-      }
-
-      // Custom validation
-      if (fieldConfig.customValidation) {
-        const customError = fieldConfig.customValidation(value);
-        if (customError) {
-          return customError;
-        }
-      }
-
-      return null;
     },
     [config.fields, values]
   );
@@ -265,13 +278,18 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
   const getFieldProps = useCallback(
     (fieldName: string) => {
       const fieldConfig = config.fields[fieldName];
+      const accessibility = fieldConfig?.accessibility;
+      const error = touched[fieldName] ? errors[fieldName] : undefined;
 
       return {
         value: values[fieldName] || '',
         onChangeText: (value: string) => setFieldValue(fieldName, value),
         onBlur: () => setFieldTouched(fieldName, true),
-        error: touched[fieldName] ? errors[fieldName] : undefined,
+        error,
         touched: touched[fieldName] || false,
+        accessibilityLabel: accessibility?.label,
+        accessibilityHint: accessibility?.hint,
+        accessibilityRole: accessibility?.role as any,
         ...fieldConfig?.inputProps, // Merge any additional input props
       };
     },
@@ -286,6 +304,20 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
       });
     };
   }, []);
+
+  // Announce visible errors to screen readers
+  useEffect(() => {
+    if (!mergedConfig.accessibility?.announceErrors) return;
+
+    const visibleErrorMessages = Object.keys(errors)
+      .filter(fieldName => touched[fieldName])
+      .map(fieldName => errors[fieldName])
+      .filter(Boolean);
+
+    if (visibleErrorMessages.length > 0) {
+      AccessibilityInfo.announceForAccessibility(visibleErrorMessages[0]);
+    }
+  }, [errors, touched, mergedConfig.accessibility?.announceErrors]);
 
   // Keyboard handling
   useEffect(() => {

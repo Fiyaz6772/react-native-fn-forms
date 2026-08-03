@@ -154,6 +154,7 @@ export const SmartOTPField: React.FC<SmartOTPFieldProps> = ({
             textContentType={index === 0 ? 'oneTimeCode' : 'none'}
             selectTextOnFocus
             contextMenuHidden={false}
+            accessibilityLabel={`Digit ${index + 1} of ${length}`}
             {...(Platform.OS === 'android' && {
               underlineColorAndroid: 'transparent',
             })}
@@ -161,7 +162,11 @@ export const SmartOTPField: React.FC<SmartOTPFieldProps> = ({
         ))}
       </View>
 
-      {fieldProps.error && <Text style={[styles.errorText, errorStyle]}>{fieldProps.error}</Text>}
+      {fieldProps.error && (
+        <Text style={[styles.errorText, errorStyle]} accessibilityLiveRegion="polite">
+          {fieldProps.error}
+        </Text>
+      )}
     </View>
   );
 };

@@ -102,7 +102,11 @@ export const SmartFormField: React.FC<SmartFormFieldProps> = ({
             </View>
           ))}
       </View>
-      {fieldProps.error && <Text style={[styles.error, errorStyle]}>{fieldProps.error}</Text>}
+      {fieldProps.error && (
+        <Text style={[styles.error, errorStyle]} accessibilityLiveRegion="polite">
+          {fieldProps.error}
+        </Text>
+      )}
     </View>
   );
 };
