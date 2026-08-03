@@ -1,41 +1,16 @@
 import React, { ReactElement } from 'react';
-import {
-  TextInput,
-  Text,
-  View,
-  StyleSheet,
-  TextInputProps,
-  TouchableOpacity,
-  ViewStyle,
-} from 'react-native';
+import { TextInput, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useFormContext } from '../context/FormContext';
+import { SmartFormFieldProps } from '../types';
 
-import { CountryCode } from '../types';
-
-interface SmartFormFieldProps extends Omit<TextInputProps, 'value' | 'onChangeText' | 'onBlur'> {
-  name: string;
-  placeholder?: string;
-  style?: any;
-  errorStyle?: any;
-  label?: string;
-  labelStyle?: any;
-  leftIcon?: ReactElement | (() => ReactElement);
-  rightIcon?: ReactElement | (() => ReactElement);
-  onLeftIconPress?: () => void;
-  onRightIconPress?: () => void;
-  leftIconStyle?: ViewStyle;
-  rightIconStyle?: ViewStyle;
-  inputContainerStyle?: ViewStyle;
-  countryCode?: CountryCode;
-}
-
-export const SmartFormField: React.FC<SmartFormFieldProps> = ({
+const SmartFormFieldComponent: React.FC<SmartFormFieldProps> = ({
   name,
   placeholder,
   style,
   errorStyle,
   label,
   labelStyle,
+  inputStyle,
   leftIcon,
   rightIcon,
   onLeftIconPress,
@@ -43,7 +18,9 @@ export const SmartFormField: React.FC<SmartFormFieldProps> = ({
   leftIconStyle,
   rightIconStyle,
   inputContainerStyle,
-  countryCode,
+  // Destructured only to exclude it from the TextInput spread below;
+  // actual phone formatting is driven by FieldConfig.countryCode in useSmartForm.
+  countryCode: _countryCode,
   ...textInputProps
 }) => {
   const form = useFormContext();
@@ -86,6 +63,7 @@ export const SmartFormField: React.FC<SmartFormFieldProps> = ({
             leftIcon && styles.inputWithLeftIcon,
             rightIcon && styles.inputWithRightIcon,
             style,
+            inputStyle,
           ]}
         />
         {rightIcon &&
@@ -110,6 +88,8 @@ export const SmartFormField: React.FC<SmartFormFieldProps> = ({
     </View>
   );
 };
+
+export const SmartFormField = React.memo(SmartFormFieldComponent);
 
 const styles = StyleSheet.create({
   container: {

@@ -3,7 +3,7 @@ import { View, TextInput, Text, StyleSheet, Platform } from 'react-native';
 import { useFormContext } from '../context/FormContext';
 import type { SmartOTPFieldProps } from '../types/OTPTypes';
 
-export const SmartOTPField: React.FC<SmartOTPFieldProps> = ({
+const SmartOTPFieldComponent: React.FC<SmartOTPFieldProps> = ({
   name,
   length = 6,
   placeholder = '●',
@@ -170,6 +170,8 @@ export const SmartOTPField: React.FC<SmartOTPFieldProps> = ({
     </View>
   );
 };
+
+export const SmartOTPField = React.memo(SmartOTPFieldComponent);
 
 const styles = StyleSheet.create({
   container: {

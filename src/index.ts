@@ -9,9 +9,15 @@ export type {
   FieldConfig,
   FormValues,
   FormErrors,
+  FormTouched,
+  FormState,
   ValidationRule,
   FieldType,
+  CountryCode,
+  StorageAdapter,
+  DraftData,
   SmartFormHook,
+  SmartFormFieldProps,
 } from './types';
 export type { SmartOTPFieldProps, OTPFieldConfig } from './types/OTPTypes';
 

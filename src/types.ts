@@ -159,7 +159,7 @@ export interface SmartFormFieldProps
   name: string;
   /** Placeholder text for the input */
   placeholder?: string;
-  /** Style for the outer container */
+  /** Style applied to the TextInput */
   style?: any;
   /** Style for error text */
   errorStyle?: any;
@@ -167,7 +167,7 @@ export interface SmartFormFieldProps
   label?: string;
   /** Style for the label text */
   labelStyle?: any;
-  /** Input style for the TextInput component */
+  /** Additional style applied to the TextInput (merged after `style`) */
   inputStyle?: any;
   /**
    * Left icon - can be a React element or a function that returns a React element

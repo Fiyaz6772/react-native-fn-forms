@@ -446,23 +446,46 @@ export const useSmartForm = (config: FormConfig): SmartFormHook => {
     loadInitialDraft();
   }, [config, draftLoaded, loadDraft]);
 
-  return {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    isValid,
-    setFieldValue,
-    setFieldError,
-    setFieldTouched,
-    validateField,
-    validateForm,
-    resetForm,
-    submitForm,
-    getFieldProps,
-    saveDraft,
-    loadDraft,
-    clearDraft,
-    hasDraft,
-  };
+  // Memoized so the context value's identity only changes when the form's own
+  // state actually changes, not on every unrelated parent/sibling re-render.
+  return useMemo(
+    () => ({
+      values,
+      errors,
+      touched,
+      isSubmitting,
+      isValid,
+      setFieldValue,
+      setFieldError,
+      setFieldTouched,
+      validateField,
+      validateForm,
+      resetForm,
+      submitForm,
+      getFieldProps,
+      saveDraft,
+      loadDraft,
+      clearDraft,
+      hasDraft,
+    }),
+    [
+      values,
+      errors,
+      touched,
+      isSubmitting,
+      isValid,
+      setFieldValue,
+      setFieldError,
+      setFieldTouched,
+      validateField,
+      validateForm,
+      resetForm,
+      submitForm,
+      getFieldProps,
+      saveDraft,
+      loadDraft,
+      clearDraft,
+      hasDraft,
+    ]
+  );
 };
