@@ -10,15 +10,15 @@ Marketing/distribution (Phase 5) runs in parallel with Phases 1–4, not after t
 **Objective:** Make the package look and behave like an actively maintained, correct library.
 
 **Tasks:**
-- [ ] Release all pending local work (icon support, docs, snack-examples, phone test)
-- [ ] Fix `isValid` computation
-- [ ] Catch validator exceptions so they can't become unhandled promise rejections
-- [ ] Wire accessibility config through to real RN props (labels, hints, roles, error announcements)
-- [ ] Memoize `FormContext` value + memoize field components to stop full-form re-renders
-- [ ] Export missing public types (`CountryCode`, `StorageAdapter`, `DraftData`, `FormState`, real `SmartFormFieldProps`)
-- [ ] Add CI (lint, test, build on push/PR)
-- [ ] Add README badges (build, coverage, bundle size, npm version) + a demo GIF
-- [ ] Resolve repo-name vs. package-name branding mismatch
+- [x] Release all pending local work (icon support, docs, snack-examples, phone test) — was already published to npm as 1.2.3/1.2.4 but never committed; git is now in sync
+- [x] Fix `isValid` computation
+- [x] Catch validator exceptions so they can't become unhandled promise rejections
+- [x] Wire accessibility config through to real RN props (labels, hints, roles, error announcements)
+- [x] Memoize `FormContext` value + memoize field components to stop full-form re-renders — partial: fixes re-renders from unrelated parent/sibling updates; per-keystroke full-form re-render still needs the Phase 4 architecture pass
+- [x] Export missing public types (`CountryCode`, `StorageAdapter`, `DraftData`, `FormState`, real `SmartFormFieldProps`)
+- [x] Add CI (lint, test, build on push/PR) — also had to fix `npm run lint`, which was completely broken (missing dependency + invalid config)
+- [x] Add README badges (build, coverage, bundle size, npm version) — added CI + bundle size; skipped coverage (needs a third-party service like Codecov connected to the repo — your call) and skipped the demo GIF (needs an actual device/simulator recording)
+- [ ] Resolve repo-name vs. package-name branding mismatch — manual step: rename the GitHub repo to `react-native-fn-forms`
 
 **Exit Criteria:** v1.3 published; CI green on main; README shows live badges and a working demo; no known crash-risk or false-config bugs open.
 
