@@ -1,6 +1,6 @@
 {
   "name": "react-native-fn-forms",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "description": "🚀 Smart form validation library for React Native with built-in validators, multi-country phone formatting (14+ countries), icon support, field matching, auto-save, OTP verification. Real-time validation, TypeScript support, accessibility-first, cross-platform iOS/Android. Pure JavaScript, no native dependencies.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

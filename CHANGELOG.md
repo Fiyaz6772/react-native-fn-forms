@@ -5,6 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-08-03
+
+### Fixed
+
+- **`isValid` was incorrect** - previously became `true` as soon as any single
+  field was touched with no error, even if required fields were still empty
+  and untouched. Now requires all required fields to be filled with no
+  active errors.
+- **Validator exceptions could crash the app** - a throwing `customValidation`
+  (or an unexpected value type reaching a built-in validator) is now caught
+  and surfaced as a field error instead of becoming an unhandled promise
+  rejection.
+- **`npm run lint` was completely broken** - `.eslintrc.js` referenced a
+  missing `@react-native-community/eslint-config` dependency and an invalid
+  `'@typescript-eslint/recommended'` extends string. Lint now runs and
+  passes in CI.
+- **`inputStyle` prop was dead** - documented on `SmartFormFieldProps` but
+  never applied to the underlying `TextInput`. Now wired through.
+
+### Added
+
+- `FieldConfig.accessibility` (`label`/`hint`/`role`) now flows through to
+  real `accessibilityLabel`/`accessibilityHint`/`accessibilityRole` props on
+  the rendered input.
+- `FormConfig.accessibility.announceErrors` now calls
+  `AccessibilityInfo.announceForAccessibility` when a visible field error
+  appears.
+- `SmartOTPField` digit inputs now have per-digit `accessibilityLabel`
+  ("Digit 1 of 6", etc.), and error text in both field components uses
+  `accessibilityLiveRegion="polite"`.
+- Exported `CountryCode`, `StorageAdapter`, `DraftData`, `FormState`, and
+  `FormTouched` types, plus the real (previously unreachable)
+  `SmartFormFieldProps`, from the package root.
+- GitHub Actions CI (lint, type check, test, build) on push/PR.
+- CI and bundle-size badges in the README.
+
+### Changed
+
+- `useSmartForm`'s returned object is now memoized, and `SmartFormField` /
+  `SmartOTPField` are wrapped in `React.memo`, so re-renders unrelated to
+  the form's own state (e.g. a sibling or parent re-rendering) no longer
+  cascade into every field. Per-keystroke full-form re-rendering is a
+  deeper architectural issue still open, tracked for a future release.
+- `SmartFormField` no longer declares its own local, drifted copy of
+  `SmartFormFieldProps` - it now imports the shared type from `types.ts`.
+
 ## [1.2.4] - 2025-11-20
 
 ### Fixed
