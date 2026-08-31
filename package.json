@@ -12,7 +12,9 @@
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
     "prepare": "npm run build",
-    "example": "cd example && npm start"
+    "example": "cd example && npm start",
+    "dev-app:create": "bash scripts/create-dev-app.sh",
+    "dev-app": "cd dev-app && npm start"
   },
   "keywords": [
     "react-native",

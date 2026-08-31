@@ -2,6 +2,16 @@
 
 We love your input! We want to make contributing to this project as easy and transparent as possible.
 
+## Local Testing
+
+To test changes in a real React Native app instead of publishing to npm each time:
+
+1. `npm run dev-app:create` — one-time scaffold of a local Expo app in `dev-app/` (gitignored, not part of the repo), linked to this library via a `file:` dependency.
+2. In one terminal: `npm run build:watch` (rebuilds `lib/` on every change to `src/`).
+3. In another terminal: `npm run dev-app` (starts the Expo dev server; edits hot-reload).
+
+If you delete `dev-app/`, just re-run `npm run dev-app:create` to get it back.
+
 ## Development Process
 
 1. Fork the repository

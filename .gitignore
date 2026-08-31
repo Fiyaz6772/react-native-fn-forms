@@ -41,6 +41,9 @@ example/.expo-shared/
 example/*
 !example/README.md
 
+# Local dev/test app (scaffolded with `npm run dev-app:create`, not part of the repo)
+dev-app/
+
 # Temporary folders
 tmp/
 temp/
